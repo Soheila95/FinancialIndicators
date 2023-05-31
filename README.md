@@ -2,4 +2,4 @@
 Requirements:
 pandas 
 ,Numpy 
-,python Interprether
+,python Interpreter 3.9
