@@ -3,4 +3,6 @@ stock_data = 'StockData/'
 
 Exploratory = Initial()
 df = Exploratory.CreateData(stock_data+'AAP.csv')
-print(df)
+df = Exploratory.MA_MACD(df,Exploratory.Close,10)
+
+

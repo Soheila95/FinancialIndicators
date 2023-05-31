@@ -23,37 +23,23 @@ class Initial:
         return df
 
     ## ------------------- Add MA & MACD -------------------------
-    def MA_MACD(df, n):
+    def MA_MACD(self,df,column, n):
 
-        df['SMA_C'] = df['Close'].rolling(window=n).mean()
+        df['SMA_'+column] = df[column].rolling(window=n).mean()
         weights = np.arange(1, n + 1)
-        df['WMA_C'] = df['Close'].rolling(n).apply(lambda prices: np.dot(prices, weights) / weights.sum(), raw=True)
-        df['EMA_C'] = df['Close'].ewm(span=n).mean()
-        ##
-        df['SMA_O'] = df['<OPEN>'].rolling(window=n).mean()
-        df['WMA_O'] = df['<OPEN>'].rolling(n).apply(lambda prices: np.dot(prices, weights) / weights.sum(), raw=True)
-        df['EMA_O'] = df['<OPEN>'].ewm(span=n).mean()
-        ###
-        df['SMA_H'] = df['<HIGH>'].rolling(window=n).mean()
-        df['WMA_H'] = df['<HIGH>'].rolling(n).apply(lambda prices: np.dot(prices, weights) / weights.sum(), raw=True)
-        df['EMA_H'] = df['<HIGH>'].ewm(span=n).mean()
-        ##
-        df['SMA_L'] = df['<LOW>'].rolling(window=n).mean()
-        df['WMA_L'] = df['<LOW>'].rolling(n).apply(lambda prices: np.dot(prices, weights) / weights.sum(), raw=True)
-        df['EMA_L'] = df['<LOW>'].ewm(span=n).mean()
-        ##
-        ##
-        df['SMA_LA'] = df['<LAST>'].rolling(window=n).mean()
-        df['WMA_LA'] = df['<LAST>'].rolling(n).apply(lambda prices: np.dot(prices, weights) / weights.sum(), raw=True)
-        df['EMA_LA'] = df['<LAST>'].ewm(span=n).mean()
+        df['WMA_'+column] = df[column].rolling(n).apply(lambda prices: np.dot(prices, weights) / weights.sum(), raw=True)
+        df['EMA_'+column] = df[column].ewm(span=n).mean()
 
-        ##----------
-        df['vol_diff'] = df['<VOL>'].diff()
-        ##------------MACD-------------------
-        exp1 = df['<CLOSE>'].ewm(span=12).mean()
-        exp2 = df['<CLOSE>'].ewm(span=26).mean()
-        df['MACD'] = exp1 - exp2
+
+        # ##------------MACD-------------------
+        if column == 'Close':
+            exp1 = df[column].ewm(span=12).mean()
+            exp2 = df[column].ewm(span=26).mean()
+            df['MACD'] = exp1 - exp2
+            df['vol_diff'] = df['Volume'].diff()
+        df.dropna(inplace=True)
         return df
+
 
     ##-------------------------- RSI ------------------------------
     def rsi(df, periods=14, ema=True):
