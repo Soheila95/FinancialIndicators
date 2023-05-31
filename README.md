@@ -1,5 +1,5 @@
 # FinancialIndicators
 Requirements:
 pandas 
-Numpy 
-python Interprether
+,Numpy 
+,python Interprether
